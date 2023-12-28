@@ -13,3 +13,6 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
 
     state = relationship("State", back_populates="cities")
+
+    # relationship between city and place
+    places = relationship('Place', back_populates='cities')
