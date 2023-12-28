@@ -1,20 +1,39 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
+    classes = {
+                'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                'State': State, 'City': City, 'Amenity': Amenity,
+                'Review': Review
+            }
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
             temp = {}
 
+            # if the cls parameter is passed in the correct class type
+            target_class = cls
+
+            # check if the cls parameter is passed in as string
+            if type(cls) == str:
+                target_class = FileStorage.classes[cls]
+
             for key, value in FileStorage.__objects.items():
-                if isinstance(value, cls):
+                if isinstance(value, target_class):
                     temp[key] = value
             return temp
         else:
@@ -35,25 +54,13 @@ class FileStorage:
 
     def reload(self):
         """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
 
-        classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = FileStorage.classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
@@ -78,4 +85,10 @@ class FileStorage:
     def cities(self):
         """getter function for City instances"""
         obj = session.query(City).join(State, City.state_id == State.id)
+        return (obj)
+
+    @property
+    def reviews(self):
+        """getter function for Review instances"""
+        obj = session.query(Review).join(Place, Review.place_id == Place.id)
         return (obj)
