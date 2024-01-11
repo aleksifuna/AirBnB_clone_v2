@@ -2,8 +2,8 @@
 """ This is the 2-do_deploy_web_static.py module """
 
 
-from fabric.api import *
-env.hosts = ['52.91.182.154', '34.202.164.102']
+from fabric.api import local, put, run, env
+env.hosts = ['18.234.192.15', '54.160.105.242']
 env.user = 'ubuntu'
 env.key_filename = "~/.ssh/id_rsa"
 
