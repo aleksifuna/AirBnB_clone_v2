@@ -20,9 +20,9 @@ def do_deploy(archive_path):
         run(f'rm /tmp/{dn}.tgz')
         run(f'mv /data/web_static/releases/{dn}/web_static/* '
             f'/data/web_static/releases/{dn}/')
-        run('rm -rf /data/web_static/releases/web_static')
+        run(f'rm -rf /data/web_static/releases/{dn}/web_static')
         run('rm -rf /data/web_static/current')
-        run(f'ln -s /data/web_static/releases/{dn}/ /data/web_static/current')
+        run(f'ln -sf /data/web_static/releases/{dn}/ /data/web_static/current')
         return True
     except Exception:
         return False
