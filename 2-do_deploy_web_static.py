@@ -12,19 +12,6 @@ env.key_filename = '~/.ssh/school'
 
 
 @task
-def do_pack():
-    """packs web_static folder to .tgz archive"""
-    try:
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        arch_name = 'web_static_' + timestamp + '.tgz'
-        local('mkdir -p versions')
-        local('tar -cvzf versions/' + arch_name + ' web_static')
-        return 'versions/' + arch_name
-    except Exception:
-        return None
-
-
-@task
 def do_deploy(archive_path):
     """distributes ana rchive to the servers"""
     try:
