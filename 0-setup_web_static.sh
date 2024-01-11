@@ -26,29 +26,25 @@ cat > /data/web_static/release/test/index.html <<EOF
 </html>
 EOF
 
-if [ -L /data/web_static/current ]; then
-        rm /data/web_static/current
-fi
+ln -sf /data/web_static/release/test/ /data/web_static/current
 
-ln -s /data/web_static/release/test/ /data/web_static/current
-
-chown -R ubuntu:ubuntu /data
+chown -R ubuntu:ubuntu /data/
 
 cat > /etc/nginx/sites-available/default <<EOF
 server {
-	listen 80;
-	listen [::]:80 default_server;
-	root   /data/web_static/current;
-	index  index.html index.htm;
-	location / {
+        listen 80;
+        listen [::]:80 default_server;
+        root   /data/web_static/current;
+        index  index.html index.htm;
+        location / {
         try_files \$uri \$uri/ =404;
-	add_header X-Served-By \$HOSTNAME;
-    }
-	location /hbnb_static {
-	alias /data/web_static/current/;
-	try_files \$uri \$uri/ =404;
         add_header X-Served-By \$HOSTNAME;
-	}
+    }
+        location /hbnb_static {
+        alias /data/web_static/current/;
+        try_files \$uri \$uri/ =404;
+        add_header X-Served-By \$HOSTNAME;
+        }
 }
 EOF
 
