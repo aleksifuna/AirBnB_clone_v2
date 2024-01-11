@@ -46,6 +46,8 @@ server {
     }
 	location /hbnb_static {
 	alias /data/web_static/current/;
+	try_files \$uri \$uri/ =404;
+        add_header X-Served-By \$HOSTNAME;
 	}
 }
 EOF
