@@ -5,12 +5,9 @@ This module supplies a fabric script that configures a server
 from fabric.api import local, task, put, run, env
 import os
 
-env.user = "ubuntu"
 env.hosts = ['18.234.192.15', '54.160.105.242']
-env.key_filename = '~/.ssh/school'
 
 
-@task
 def do_deploy(archive_path):
     """distributes ana rchive to the servers"""
     if os.path.exists(archive_path) is False:
