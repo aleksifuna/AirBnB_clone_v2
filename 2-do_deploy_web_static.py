@@ -4,7 +4,6 @@ This module supplies a fabric script that configures a server
 """
 from fabric.api import local, task, put, run, env
 from datetime import datetime
-from os.path import basename
 
 env.user = "ubuntu"
 env.hosts = ['18.234.192.15', '54.160.105.242']
@@ -15,7 +14,7 @@ env.key_filename = '~/.ssh/school'
 def do_deploy(archive_path):
     """distributes ana rchive to the servers"""
     try:
-        dn = basename(archive_path)[:-4]
+        dn = archive_path.split('/')[1].split('.')[0]
         put(archive_path, '/tmp/')
         run(f'mkdir -p /data/web_static/releases/{dn}/')
         run(f'tar -xzf /tmp/{dn}.tgz -C /data/web_static/releases/{dn}/')
