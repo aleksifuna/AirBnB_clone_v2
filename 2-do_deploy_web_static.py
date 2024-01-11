@@ -4,7 +4,7 @@ This module supplies a fabric script that configures a server
 """
 from fabric.api import local, task, put, run, env
 from datetime import datetime
-from os.path import exists
+from os.path import basename
 
 env.user = "ubuntu"
 env.hosts = ['18.234.192.15', '54.160.105.242']
@@ -27,10 +27,8 @@ def do_pack():
 @task
 def do_deploy(archive_path):
     """distributes ana rchive to the servers"""
-    if exists(archive_path) is False:
-        return False
     try:
-        dn = archive_path[9:-4]
+        dn = basename(archive_path)[:-4]
         put(archive_path, '/tmp/')
         run(f'mkdir -p /data/web_static/releases/{dn}/')
         run(f'tar -xzf /tmp/{dn}.tgz -C /data/web_static/releases/{dn}/')
