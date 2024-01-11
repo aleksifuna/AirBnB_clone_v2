@@ -14,7 +14,7 @@ def do_deploy(archive_path):
     """distributes ana rchive to the servers"""
     try:
         dn = archive_path.split('/')[1].split('.')[0]
-        put(archive_path, '/tmp/' + dn + 'tgz', use_sudo=True)
+        put(archive_path, '/tmp/' + dn + '.tgz', use_sudo=True)
         run(f'mkdir -p /data/web_static/releases/{dn}/')
         run(f'tar -xzf /tmp/{dn}.tgz -C /data/web_static/releases/{dn}/')
         run(f'rm /tmp/{dn}.tgz')
@@ -22,7 +22,8 @@ def do_deploy(archive_path):
             f'/data/web_static/releases/{dn}/')
         run(f'rm -rf /data/web_static/releases/{dn}/web_static')
         run('rm -rf /data/web_static/current')
-        run(f'ln -sf /data/web_static/releases/{dn}/ /data/web_static/current')
+        run(f'ln -s /data/web_static/releases/{dn}/ /data/web_static/current')
+        print('New version deployed!')
         return True
     except Exception:
         return False
