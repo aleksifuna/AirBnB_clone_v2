@@ -4,7 +4,7 @@ This module supplies a fabric script that configures a server
 """
 from fabric.api import local, task, put, run, env
 from datetime import datetime
-import os.path import exists
+from os.path import exists
 
 env.user = "ubuntu"
 env.hosts = ['18.234.192.15', '54.160.105.242']
