@@ -1,30 +1,29 @@
 #!/usr/bin/python3
-"""
-This module supplies a fabric script that configures a server
-"""
-from fabric.api import local, task, put, run, env
-from datetime import datetime
-
-env.user = "ubuntu"
-env.hosts = ['18.234.192.15', '54.160.105.242']
-env.key_filename = '~/.ssh/school'
+""" This is the 2-do_deploy_web_static.py module """
 
 
-@task
+from fabric.api import *
+env.hosts = ['52.91.182.154', '34.202.164.102']
+env.user = 'ubuntu'
+env.key_filename = "~/.ssh/id_rsa"
+
+
 def do_deploy(archive_path):
-    """distributes ana rchive to the servers"""
-    try:
-        dn = archive_path.split('/')[1].split('.')[0]
-        put(archive_path, '/tmp/')
-        run(f'mkdir -p /data/web_static/releases/{dn}/')
-        run(f'tar -xzf /tmp/{dn}.tgz -C /data/web_static/releases/{dn}/')
-        run(f'rm /tmp/{dn}.tgz')
-        run(f'mv /data/web_static/releases/{dn}/web_static/* '
-            f'/data/web_static/releases/{dn}/')
-        run('rm -rf /data/web_static/releases/web_static')
-        run('rm -rf /data/web_static/current')
-        run(f'ln -s /data/web_static/releases/{dn}/ /data/web_static/current')
-        print("New version deployed!")
-        return True
-    except Exception:
+    """ This is the function for deploying the static content """
+    import os
+    if os.path.exists(archive_path) is False:
         return False
+    path = archive_path.split('/')
+    file_name = path[1]
+    no_ext = file_name.split('.')[0]
+    put("./" + archive_path, "/tmp/" + file_name, use_sudo=True)
+    run("mkdir -p /data/web_static/releases/" + no_ext + "/")
+    run("tar -xzf /tmp/" + file_name + " -C /data/web_static/releases/"
+        + no_ext + "/")
+    run("mv /data/web_static/releases/" + no_ext + "/web_static/*"
+        + " /data/web_static/releases/" + no_ext + "/")
+    run("rm -rf /tmp/" + file_name)
+    run("rm -rf /data/web_static/current")
+    run("ln -sf /data/web_static/releases/" + no_ext + "/ "
+        + "/data/web_static/current")
+    return True
