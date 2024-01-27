@@ -34,10 +34,10 @@ cat > /etc/nginx/sites-available/default <<EOF
 server {
         listen 80;
         listen [::]:80 default_server;
-        root   /data/web_static/current;
         index  index.html index.htm;
         location / {
         try_files \$uri \$uri/ =404;
+        root /var/www/html/;
         add_header X-Served-By \$HOSTNAME;
     }
         location /hbnb_static {

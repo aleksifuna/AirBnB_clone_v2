@@ -2,13 +2,11 @@
 """
 This module supplies a fabric script that generates a .tgz archive
 """
-from fabric.api import local, task, put, run, env
+from fabric.api import local, put, run, env,task
 from datetime import datetime
-import os
 
 env.user = "ubuntu"
 env.hosts = ['18.234.192.15', '54.160.105.242']
-
 
 @task
 def do_pack():

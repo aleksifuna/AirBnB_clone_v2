@@ -11,6 +11,7 @@ from models.amenity import Amenity
 from models.review import Review
 from sqlalchemy import create_engine
 from os import getenv
+import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 classes = {
@@ -46,27 +47,26 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """ returns all the objects of the class name cls """
-        session = sessionmaker(bind=self.__engine)
-        self.__session = session()
-        objects = {}
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
+        """
+        dic = {}
         if cls:
-            if cls in classes:
-                obj = self.__session.query(DBStorage.classes[cls]).all()
-                for i in obj:
-                    key = f"{cls}.{i.id}"
-                    objects[key] = i
-                return objects
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
         else:
-            all_object = {}
-            for key, value in DBStorage.classes.items():
-                objects = {}
-                for obj in self.__session.query(
-                        classes[value.__class__.__name__]).all():
-                    ky = f"{key}.{obj.id}"
-                    objects[ky] = obj
-                all_objects[key] = objects
-            return all_objects
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """adds the object to the current database session"""
@@ -87,3 +87,7 @@ class DBStorage:
         ses_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(ses_factory)
         self.__session = Session
+
+    def close(self):
+        """ calls remove() method on __session"""
+        self.__session.remove()
