@@ -14,21 +14,11 @@ from os import getenv
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-classes = {
-        'BaseModel': BaseModel, 'User': User, 'Place': Place,
-        'State': State, 'City': City, 'Amenity': Amenity, 'Review': Review
-        }
-
 
 class DBStorage:
     """
     defines the dbstorage class methods and attributes
     """
-    classes = {
-            'BaseModel': BaseModel, 'User': User,
-            'Place': Place, 'State': State, 'City': City,
-            'Amenity': Amenity, 'Review': Review
-            }
     __engine = None
     __session = None
     username = getenv('HBNB_MYSQL_USER')
@@ -56,16 +46,16 @@ class DBStorage:
             if type(cls) is str:
                 cls = eval(cls)
             query = self.__session.query(cls)
-            for elem in query:
-                key = "{}.{}".format(type(elem).__name__, elem.id)
-                dic[key] = elem
+            for obj in query:
+                key = "{}.{}".format(type(obj).__name__, obj.id)
+                dic[key] = obj
         else:
-            lista = [State, City, User, Place, Review, Amenity]
-            for clase in lista:
-                query = self.__session.query(clase)
-                for elem in query:
-                    key = "{}.{}".format(type(elem).__name__, elem.id)
-                    dic[key] = elem
+            obj_list = [State, City, User, Place, Review, Amenity]
+            for clss in obj_list:
+                query = self.__session.query(clss)
+                for obj in query:
+                    key = "{}.{}".format(type(obj).__name__, obj.id)
+                    dic[key] = obj
         return (dic)
 
     def new(self, obj):

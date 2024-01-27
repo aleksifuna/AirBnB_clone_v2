@@ -29,7 +29,7 @@ class FileStorage:
             target_class = cls
 
             # check if the cls parameter is passed in as string
-            if type(cls) == str:
+            if type(cls) is str:
                 target_class = FileStorage.classes[cls]
 
             for key, value in FileStorage.__objects.items():
@@ -60,13 +60,14 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = FileStorage.classes[val['__class__']](**val)
+                    self.all()[key] = FileStorage.classes[val['__class__']](
+                            **val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """delete obj from __objects if it’s inside - if obj is equal to None
-        the method should not do anything"""
+        """delete obj from __objects if it’s inside - if obj is equal to None,
+        The method should not do anything"""
 
         if obj:
             my_key = None
@@ -78,18 +79,6 @@ class FileStorage:
                 FileStorage.__objects.pop(my_key)
         else:
             pass
-
-    @property
-    def cities(self):
-        """getter function for City instances"""
-        obj = session.query(City).join(State, City.state_id == State.id)
-        return (obj)
-
-    @property
-    def reviews(self):
-        """getter function for Review instances"""
-        obj = session.query(Review).join(Place, Review.place_id == Place.id)
-        return (obj)
 
     def close(self):
         """ class the reload method """
