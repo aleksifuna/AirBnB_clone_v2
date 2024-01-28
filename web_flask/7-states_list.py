@@ -9,14 +9,17 @@ from models import storage
 from models.state import State
 app = Flask(__name__)
 
-objs = storage.all(State)
+states = storage.all(State)
+objs = sorted(states.items(), key=lambda x: x[1].name)
+
 
 @app.route('/states_list', strict_slashes=False)
-def state_list(n):
+def state_list():
     """
     Displays a list of states in the db
     """
-    return render_template('7-number_odd_or_even.html', objs = objs)
+    return render_template('7-states_list.html', objs=objs)
+
 
 @app.teardown_appcontext
 def teardown_db(exeption):
@@ -24,5 +27,7 @@ def teardown_db(exeption):
     removes the current session after each request
     """
     storage.close()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
