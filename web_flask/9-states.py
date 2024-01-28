@@ -7,18 +7,32 @@ from flask import render_template
 from markupsafe import escape
 from models import storage
 from models.state import State
+from models.city import City
 app = Flask(__name__)
 
+cities = storage.all(City)
 states = storage.all(State)
+city_objs = sorted(cities.items(), key=lambda x: x[1].name)
 state_objs = sorted(states.items(), key=lambda x: x[1].name)
 
 
-@app.route('/states_list', strict_slashes=False)
+@app.route('/states', strict_slashes=False)
 def state_list():
     """
     Displays a list of states in the db
     """
     return render_template('7-states_list.html', state_objs=state_objs)
+
+
+@app.route('/states/<id>', strict_slashes=False)
+def cities_list(id):
+    """
+    Displays a list of cities from a state in the db
+    """
+    return render_template('9-states.html',
+            city_objs=city_objs,
+            states=states,
+            id=id)
 
 
 @app.teardown_appcontext
