@@ -18,7 +18,7 @@ def state_list():
     """
     Displays a list of states in the db
     """
-    return render_template('7-states_list.html', state_objs=state_objs)
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
