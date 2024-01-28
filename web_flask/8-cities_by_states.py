@@ -12,8 +12,6 @@ app = Flask(__name__)
 
 states = storage.all(State)
 cities = storage.all(City)
-state_objs = sorted(states.items(), key=lambda x: x[1].name)
-city_objs = sorted(cities.items(), key=lambda x: x[1].name)
 
 
 @app.route('/cities_by_states', strict_slashes=False)
@@ -22,8 +20,8 @@ def cities_by_states():
     Displays a list of cities by state in the db
     """
     return render_template('8-cities_by_states.html',
-            state_objs=state_objs,
-            city_objs=city_objs)
+            states=states,
+            cities=cities)
 
 
 @app.teardown_appcontext

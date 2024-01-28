@@ -8,9 +8,7 @@ from markupsafe import escape
 from models import storage
 from models.state import State
 app = Flask(__name__)
-
 states = storage.all(State)
-state_objs = sorted(states.items(), key=lambda x: x[1].name)
 
 
 @app.route('/states_list', strict_slashes=False)

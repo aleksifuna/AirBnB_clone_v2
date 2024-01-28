@@ -6,12 +6,12 @@
     <BODY>
         <H1>States</H1>
         <UL>
-	{% for state in state_objs %}
-		<LI>{{ state[1].id }}: <B>{{ state[1].name }}</B></LI>
+	{% for state in states.values()|sort(attribute="name") %}
+		<LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
                 <UL>
-		{% for city in city_objs %}
-			{% if city[1].state_id == state[1].id %}
-			<LI>{{ city[1].id }}: <B>{{ city[1].name }}</B></LI>
+		{% for city in cities.values()|sort(attribute="name") %}
+			{% if city.state_id == state.id %}
+			<LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
 			{% endif %}
 		{% endfor %}
                 </UL>
