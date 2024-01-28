@@ -19,9 +19,11 @@ def cities_by_states():
     """
     Displays a list of cities by state in the db
     """
-    return render_template('8-cities_by_states.html',
+    return render_template(
+            '8-cities_by_states.html',
             states=states,
-            cities=cities)
+            cities=cities
+            )
 
 
 @app.teardown_appcontext
