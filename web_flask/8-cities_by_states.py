@@ -27,7 +27,7 @@ def cities_by_states():
 
 
 @app.teardown_appcontext
-def teardown_db(exeption):
+def teardown_db(exception=None):
     """
     removes the current session after each request
     """
