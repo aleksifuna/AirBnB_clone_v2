@@ -6,17 +6,24 @@ from sqlalchemy.orm import relationship
 import models
 from datetime import datetime
 from models.city import City
+from os import getenv
 
 
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="delete")
+    cities = relationship(
+            'City',
+            backref='state',
+            cascade='all, delete, delete-orphan'
+            )
 
+
+if getenv('HBNB_TYPE_STORAGE') == 'fs':
     @property
     def cities(self):
-        """returns a list of all cities from current state"""
+        '''returns a list of all cities from current state'''
         cities_list = []
         city_dict = models.storage.all(City)
         for key, value in city_dict.items():
