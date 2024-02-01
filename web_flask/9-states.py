@@ -27,7 +27,8 @@ def cities_list(id):
     """
     Displays a list of cities from a state in the db
     """
-    return render_template('9-states.html',
+    return render_template(
+            '9-states.html',
             cities=cities,
             states=states,
             id=id)
